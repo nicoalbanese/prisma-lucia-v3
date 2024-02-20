@@ -10,6 +10,7 @@ import {
   setAuthCookie,
   validateAuthFormData,
 } from "../auth/utils";
+import { cookies } from "next/headers";
 
 interface ActionResult {
   error: string;
@@ -44,9 +45,15 @@ export async function signInAction(
 
     const session = await lucia.createSession(existingUser.id, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
-    setAuthCookie(sessionCookie);
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes,
+    );
 
-    redirect("/dashboard");
+    // setAuthCookie(sessionCookie);
+
+    return redirect("/dashboard");
   } catch (e) {
     return genericError;
   }
