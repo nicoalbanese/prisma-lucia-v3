@@ -17,7 +17,7 @@ export default async function Page() {
         <Label htmlFor="email" className="text-muted-foreground">
           Email
         </Label>
-        <Input name="username" type="text" id="email" required />
+        <Input name="email" type="email" id="email" required />
         <br />
         <Label htmlFor="password" className="text-muted-foreground">
           Password
@@ -41,15 +41,10 @@ export default async function Page() {
 
 async function signup(formData: FormData): Promise<ActionResult> {
   "use server";
-  const username = formData.get("username");
+  const email = formData.get("email");
   // username must be between 4 ~ 31 characters, and only consists of lowercase letters, 0-9, -, and _
   // keep in mind some database (e.g. mysql) are case insensitive
-  if (
-    typeof username !== "string" ||
-    username.length < 3 ||
-    username.length > 31 ||
-    !/^[a-z0-9_-]+$/.test(username)
-  ) {
+  if (typeof email !== "string" || email.length < 3 || email.length > 31) {
     return {
       error: "Invalid username",
     };
@@ -72,7 +67,7 @@ async function signup(formData: FormData): Promise<ActionResult> {
   await db.user.create({
     data: {
       id: userId,
-      username,
+      email,
       hashedPassword,
     },
   });

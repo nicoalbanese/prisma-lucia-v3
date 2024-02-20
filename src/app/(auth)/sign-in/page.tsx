@@ -18,7 +18,7 @@ export default async function Page() {
         <Label htmlFor="email" className="text-muted-foreground">
           Email
         </Label>
-        <Input name="username" id="email" type="text" required />
+        <Input name="email" id="email" type="email" required />
         <br />
         <Label htmlFor="password" className="text-muted-foreground">
           Password
@@ -44,13 +44,8 @@ export default async function Page() {
 
 async function login(formData: FormData): Promise<ActionResult> {
   "use server";
-  const username = formData.get("username");
-  if (
-    typeof username !== "string" ||
-    username.length < 3 ||
-    username.length > 31 ||
-    !/^[a-z0-9_-]+$/.test(username)
-  ) {
+  const email = formData.get("email");
+  if (typeof email !== "string" || email.length < 3 || email.length > 31) {
     return {
       error: "Invalid username",
     };
@@ -67,7 +62,7 @@ async function login(formData: FormData): Promise<ActionResult> {
   }
 
   const existingUser = await db.user.findUnique({
-    where: { username: username.toLowerCase() },
+    where: { email: email.toLowerCase() },
   });
   if (!existingUser) {
     // NOTE:

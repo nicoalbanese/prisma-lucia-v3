@@ -1,8 +1,9 @@
 import SignOutBtn from "@/components/auth/SignOutBtn";
 import { validateRequest } from "@/lib/auth/lucia";
+import { getUserAuth } from "@/lib/auth/utils";
 
 export default async function Home() {
-  const { session } = await validateRequest();
+  const { session } = await getUserAuth();
   return (
     <main>
       <h1 className="font-semibold text-2xl">Home</h1>
