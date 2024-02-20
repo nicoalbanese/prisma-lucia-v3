@@ -1,15 +1,13 @@
 import { Toaster } from "@/components/ui/sonner";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
-import { validateRequest } from "@/lib/auth/utils";
-import { redirect } from "next/navigation";
+import { checkAuth } from "@/lib/auth/utils";
 export default async function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { session } = await validateRequest();
-  if (!session) redirect("/sign-in");
+  await checkAuth();
   return (
     <main>
       <div className="flex h-screen">

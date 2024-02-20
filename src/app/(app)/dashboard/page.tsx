@@ -1,4 +1,5 @@
-import { validateRequest } from "@/lib/auth/utils";
+import SignOutBtn from "@/components/auth/SignOutBtn";
+import { validateRequest } from "@/lib/auth/lucia";
 
 export default async function Home() {
   const { session } = await validateRequest();
@@ -9,6 +10,7 @@ export default async function Home() {
         Wow, that was easy. Now it&apos;s your turn. Building something cool!
       </p>
       <pre className="bg-muted p-8">{JSON.stringify(session, null, 2)}</pre>
+      <SignOutBtn />
     </main>
   );
 }

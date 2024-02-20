@@ -4,21 +4,38 @@ import { cookies } from "next/headers";
 import { lucia } from "@/lib/auth/lucia";
 import { redirect } from "next/navigation";
 import { generateId } from "lucia";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default async function Page() {
   return (
-    <>
-      <h1>Create an account</h1>
+    <main className="max-w-lg mx-auto my-4 bg-popover p-10">
+      <h1 className="text-2xl font-bold text-center">Create an account</h1>
       <form action={signup}>
-        <label htmlFor="username">Username</label>
-        <input name="username" id="username" />
+        <Label htmlFor="email" className="text-muted-foreground">
+          Email
+        </Label>
+        <Input name="username" type="text" id="email" required />
         <br />
-        <label htmlFor="password">Password</label>
-        <input type="password" name="password" id="password" />
+        <Label htmlFor="password" className="text-muted-foreground">
+          Password
+        </Label>
+        <Input type="password" name="password" id="password" required />
         <br />
-        <button>Continue</button>
+
+        <Button className="w-full" type="submit">
+          Sign up
+        </Button>
       </form>
-    </>
+      <div className="mt-4 text-muted-foreground text-center text-sm">
+        Already have an account?{" "}
+        <Link href="/sign-in" className="text-secondary-foreground underline">
+          Sign in
+        </Link>
+      </div>
+    </main>
   );
 }
 
