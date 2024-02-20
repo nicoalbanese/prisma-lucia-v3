@@ -12,3 +12,5 @@ export const updateUserSchema = z.object({
   name: z.string().min(3).optional(),
   email: z.string().min(4).optional(),
 });
+
+export type UsernameAndPassword = z.infer<typeof authenticationSchema>;

@@ -1,5 +1,8 @@
 import { redirect } from "next/navigation";
 import { validateRequest } from "@/lib/auth/lucia";
+import { cookies } from "next/headers";
+import { UsernameAndPassword, authenticationSchema } from "../db/schema/auth";
+import { Cookie } from "lucia";
 
 export type AuthSession = {
   session: {
@@ -27,4 +30,35 @@ export const getUserAuth = async (): Promise<AuthSession> => {
 export const checkAuth = async () => {
   const { session } = await validateRequest();
   if (!session) redirect("/sign-in");
+};
+
+export const genericError = { error: "Error, please try again." };
+
+export const setAuthCookie = (cookie: Cookie) => {
+  cookies().set(cookie.name, cookie.value, cookie.attributes);
+};
+
+const getErrorMessage = (errors: any): string => {
+  if (errors.email) return "Invalid Email";
+  if (errors.password) return "Invalid Password - " + errors.password[0];
+  return ""; // return a default error message or an empty string
+};
+
+export const validateAuthFormData = (
+  formData: FormData,
+):
+  | { data: UsernameAndPassword; error: null }
+  | { data: null; error: string } => {
+  const email = formData.get("email");
+  const password = formData.get("password");
+  const result = authenticationSchema.safeParse({ email, password });
+
+  if (!result.success) {
+    return {
+      data: null,
+      error: getErrorMessage(result.error.flatten().fieldErrors),
+    };
+  }
+
+  return { data: result.data, error: null };
 };
